@@ -143,7 +143,7 @@ public class OperationHistory {
          * Use builder to create the request.
          */
         Request(Set<FilterType> types, String label, DateTime from, DateTime till, String startRecord, Integer records,
-                Boolean details) {
+                Boolean details, String groupId, String spendingCategory) {
 
             super(OperationHistory.class);
             if (from != null && till != null && from.isAfter(till)) {
@@ -164,6 +164,8 @@ public class OperationHistory {
             addParameter("start_record", startRecord);
             addParameter("records", records);
             addParameter("details", details);
+            addParameter("group_id", groupId);
+            addParameter("spending_category", spendingCategory);
         }
 
         @Override
@@ -196,6 +198,8 @@ public class OperationHistory {
             private String startRecord;
             private Integer records;
             private Boolean details;
+            private String groupId;
+            private String spendingCategory;
 
             /**
              * Specifies types of operations that respond should contain. Can be omitted if no
@@ -270,13 +274,33 @@ public class OperationHistory {
             }
 
             /**
+             * Request operation param for union element by groupId
+             *
+             * @param groupId for grouping
+             */
+            public Builder setGroup(String groupId) {
+                this.groupId = groupId;
+                return this;
+            }
+
+            /**
+             * Request operation param for query by spending category
+             *
+             * @param spendingCategory query by categoryId
+             */
+            public Builder setSpendingCategory(String spendingCategory) {
+                this.spendingCategory = spendingCategory;
+                return this;
+            }
+
+            /**
              * Creates the {@link OperationHistory.Request}
              *
              * @return the request
              */
             public Request create() {
                 return new Request(types == null ? Collections.<FilterType>emptySet() : types,
-                        label, from, till, startRecord, records, details);
+                        label, from, till, startRecord, records, details, groupId, spendingCategory);
             }
         }
     }
